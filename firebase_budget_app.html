@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐄 ההנהלה וזכיונות - התקציב 🐄</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8ff 50%, #e8f5e8 100%);
+            min-height: 100vh;
+            direction: rtl;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .title {
+            font-size: 2.5rem;
+            color: #2d5016;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .cow-button {
+            font-size: 4rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(50%);
+        }
+        
+        .cow-button:hover {
+            transform: translateX(50%) scale(1.1);
+        }
+        
+        .cow-button.animate {
+            animation: bounce 0.3s ease;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateX(50%) scale(1); }
+            50% { transform: translateX(50%) scale(1.2); }
+        }
+        
+        .status-bar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .status-item {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .connected {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .disconnected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .authenticated {
+            background: #cce5ff;
+            color: #004085;
+        }
+        
+        .not-authenticated {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .main-content {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid #e8f5e8;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: #2d5016;
+            margin-bottom: 15px;
+            text-align: right;
+            font-weight: bold;
+        }
+        
+        .grid {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .grid-2 {
+            grid-template-columns: 1fr 1fr;
+        }
+        
+        .grid-3 {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .label {
+            font-weight: 600;
+            color: #2d5016;
+            margin-bottom: 5px;
+            text-align: right;
+        }
+        
+        .input {
+            padding: 12px;
+            border: 2px solid #d1e7dd;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: right;
+        }
+        
+        .input:focus {
+            outline: none;
+            border-color: #0d6efd;
+        }
+        
+        .input:disabled {
+            background: #f8f9fa;
+            color: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        .button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .button-primary {
+            background: #0d6efd;
+            color: white;
+        }
+        
+        .button-primary:hover:not(:disabled) {
+            background: #0b5ed7;
+        }
+        
+        .button-success {
+            background: #198754;
+            color: white;
+        }
+        
+        .button-success:hover:not(:disabled) {
+            background: #157347;
+        }
+        
+        .button-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .button-disabled {
+            background: #6c757d;
+            color: white;
+            cursor: not-allowed;
+        }
+        
+        .budget-display {
+            background: #d4edda;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .budget-amount {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #155724;
+        }
+        
+        .category-item {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #ffeaa7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .category-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .category-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #b45309;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .summary-item {
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .summary-budget {
+            background: #cce5ff;
+            color: #004085;
+        }
+        
+        .summary-spent {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .summary-difference.positive {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .summary-difference.negative {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .summary-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .summary-amount {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .modal-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #cce5ff;
+            color: #004085;
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 300px;
+            z-index: 1001;
+            border: 2px solid #b3d9ff;
+        }
+        
+        .notification.warning {
+            background: #f8d7da;
+            color: #721c24;
+            border-color: #f1aeb5;
+        }
+        
+        .cow-decorations {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .cow-decoration {
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.1;
+        }
+        
+        .add-category {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #b3d9ff;
+            margin-bottom: 20px;
+        }
+
+        .setup-notice {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .setup-notice h3 {
+            color: #b45309;
+            margin-bottom: 10px;
+        }
+
+        .setup-notice p {
+            color: #856404;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Cow Decorations -->
+    <div class="cow-decorations">
+        <div class="cow-decoration" style="top: 10%; left: 10%;">🐄</div>
+        <div class="cow-decoration" style="top: 20%; right: 20%;">🐄</div>
+        <div class="cow-decoration" style="bottom: 20%; left: 20%;">🐄</div>
+        <div class="cow-decoration" style="bottom: 10%; right: 10%;">🐄</div>
+        <div class="cow-decoration" style="top: 50%; left: 25%;">🐄</div>
+        <div class="cow-decoration" style="top: 30%; right: 30%;">🐄</div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="status-bar">
+                <div class="status-item" id="connectionStatus">🔌 מתחבר...</div>
+                <div class="status-item" id="authStatus">🔒 צפייה בלבד</div>
+                <button class="button button-success" id="loginBtn" onclick="openPasswordModal()" style="padding: 8px 15px; font-size: 0.9rem;">
+                    🔑 התחבר לעריכה
+                </button>
+                <button class="button button-danger" id="logoutBtn" onclick="logout()" style="padding: 8px 15px; font-size: 0.9rem; display: none;">
+                    🚪 התנתק
+                </button>
+            </div>
+            
+            <h1 class="title">🐄 ההנהלה וזכיונות - התקציב 🐄</h1>
+            <button class="cow-button" id="cowButton" title="לחץ לקול פרה! 🐄">🐄</button>
+            <div id="cowCounter" style="margin-top: 60px; font-weight: bold; color: #2d5016;"></div>
+            <p style="color: #6c757d; margin-top: 10px;">מנהלי תקציב אירועים מתקדם - זמן אמת!</p>
+            
+            <!-- Navigation Tabs -->
+            <div style="margin-top: 20px; display: flex; justify-content: center; gap: 10px;">
+                <button class="button button-primary" id="mainTab" onclick="showTab('main')" style="padding: 10px 20px;">
+                    💰 תקציב ראשי
+                </button>
+                <button class="button" id="participantsTab" onclick="showTab('participants')" style="padding: 10px 20px; background: #e9ecef; color: #495057;">
+                    👥 משתתפים
+                </button>
+            </div>
+        </div>
+
+        <!-- Setup Notice - מוסתר כי Firebase מוגדר -->
+        <div class="setup-notice" id="setupNotice" style="display: none;">
+            <h3>✅ Firebase מוגדר ומוכן!</h3>
+            <p>האפליקציה פועלת בזמן אמת עם כל המשתמשים</p>
+        </div>
+
+        <!-- Main Tab Content -->
+        <div class="main-content" id="mainContent">
+            <!-- Event Details -->
+            <div class="section">
+                <h2 class="section-title">פרטי האירוע</h2>
+                <div class="grid grid-2">
+                    <div class="input-group">
+                        <label class="label">📅 שם האירוע</label>
+                        <input type="text" class="input" id="eventName" placeholder="הכנס שם אירוע" disabled>
+                    </div>
+                    <div class="input-group">
+                        <label class="label">📅 תאריך האירוע</label>
+                        <input type="date" class="input" id="eventDate" disabled>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Budget Settings -->
+            <div class="section">
+                <h2 class="section-title">הגדרות תקציב</h2>
+                <div class="grid grid-3">
+                    <div class="input-group">
+                        <label class="label">💰 תקציב לאדם (₪)</label>
+                        <input type="number" class="input" id="budgetPerPerson" min="0" step="0.01" value="0" disabled>
+                    </div>
+                    <div class="input-group">
+                        <label class="label">👥 מספר משתתפים</label>
+                        <input type="number" class="input" id="participantCount" min="1" value="1" disabled>
+                    </div>
+                    <div class="input-group">
+                        <label class="label">🎯 תקציב מקסימלי (₪)</label>
+                        <input type="number" class="input" id="maxBudget" min="0" step="0.01" placeholder="אופציונלי" disabled>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Budget Display -->
+            <div class="budget-display">
+                <h3>סך התקציב הכולל</h3>
+                <div class="budget-amount" id="totalBudget">₪0.00</div>
+                <p id="budgetBreakdown"></p>
+            </div>
+
+            <!-- Add Category -->
+            <div class="section">
+                <div class="add-category">
+                    <h3 class="section-title">הוסף קטגוריית הוצאה</h3>
+                    <div class="grid grid-2" style="margin-bottom: 15px;">
+                        <div class="input-group">
+                            <label class="label">שם הקטגוריה</label>
+                            <input type="text" class="input" id="categoryName" placeholder="למשל: אוכל, משקאות" disabled>
+                        </div>
+                        <div class="input-group">
+                            <label class="label">סכום (₪)</label>
+                            <input type="number" class="input" id="categoryAmount" min="0" step="0.01" disabled>
+                        </div>
+                    </div>
+                    <button class="button button-disabled" id="addCategoryBtn" disabled>
+                        ➕ נדרש אימות לעריכה
+                    </button>
+                </div>
+            </div>
+
+            <!-- Categories List -->
+            <div class="section">
+                <h2 class="section-title">הוצאות לפי קטגוריות</h2>
+                <div id="categoriesList">
+                    <p style="text-align: center; color: #6c757d; padding: 20px;">
+                        עדיין לא הוספו קטגוריות
+                    </p>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="section">
+                <h2 class="section-title">סיכום תקציבי</h2>
+                <div class="summary-grid">
+                    <div class="summary-item summary-budget">
+                        <div class="summary-title">סך התקציב</div>
+                        <div class="summary-amount" id="summaryBudget">₪0.00</div>
+                    </div>
+                    <div class="summary-item summary-spent">
+                        <div class="summary-title">סך ההוצאות</div>
+                        <div class="summary-amount" id="summarySpent">₪0.00</div>
+                    </div>
+                    <div class="summary-item summary-difference positive" id="summaryDifference">
+                        <div class="summary-title" id="differenceTitle">יתרה</div>
+                        <div class="summary-amount" id="differenceAmount">₪0.00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Participants Tab Content -->
+        <div class="main-content" id="participantsContent" style="display: none;">
+            <!-- Add Participant -->
+            <div class="section">
+                <div class="add-category">
+                    <h3 class="section-title">הוסף משתתף חדש</h3>
+                    <div class="grid grid-2" style="margin-bottom: 15px;">
+                        <div class="input-group">
+                            <label class="label">שם המשתתף</label>
+                            <input type="text" class="input" id="participantName" placeholder="הכנס שם" disabled>
+                        </div>
+                        <div class="input-group">
+                            <label class="label">סכום שתרם (₪)</label>
+                            <input type="number" class="input" id="participantAmount" min="0" step="0.01" disabled>
+                        </div>
+                    </div>
+                    <button class="button button-disabled" id="addParticipantBtn" disabled>
+                        ➕ נדרש אימות לעריכה
+                    </button>
+                </div>
+            </div>
+
+            <!-- Participants List -->
+            <div class="section">
+                <h2 class="section-title">רשימת משתתפים</h2>
+                <div id="participantsList">
+                    <p style="text-align: center; color: #6c757d; padding: 20px;">
+                        עדיין לא הוספו משתתפים
+                    </p>
+                </div>
+            </div>
+
+            <!-- Participants Summary -->
+            <div class="section">
+                <h2 class="section-title">סיכום משתתפים</h2>
+                <div class="summary-grid">
+                    <div class="summary-item summary-budget">
+                        <div class="summary-title">סך כל התרומות</div>
+                        <div class="summary-amount" id="totalContributions">₪0.00</div>
+                    </div>
+                    <div class="summary-item summary-spent">
+                        <div class="summary-title">מספר משתתפים</div>
+                        <div class="summary-amount" id="totalParticipants">0</div>
+                    </div>
+                    <div class="summary-item summary-difference positive">
+                        <div class="summary-title">ממוצע לאדם</div>
+                        <div class="summary-amount" id="averageContribution">₪0.00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Modal -->
+    <div class="modal" id="passwordModal">
+        <div class="modal-content">
+            <div class="modal-icon">🔒</div>
+            <h2 class="modal-title">נדרש אימות</h2>
+            <p style="margin-bottom: 20px;">כדי לערוך את התקציב צריך להזין את הסיסמא</p>
+            <input type="password" class="input" id="passwordInput" placeholder="הזן סיסמא..." style="text-align: center;">
+            <div class="modal-buttons">
+                <button class="button button-primary" style="flex: 1;" onclick="cancelPassword()">ביטול</button>
+                <button class="button button-success" style="flex: 1;" onclick="submitPassword()">אמת</button>
+            </div>
+            <p style="margin-top: 15px; font-size: 0.9rem; color: #6c757d;">
+                💡 רמז: קול של פרה + השנה הנוכחת
+            </p>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // 🔥 Firebase Configuration - מוגדר ומוכן!
+        const firebaseConfig = {
+            apiKey: "AIZaSyBDge3PovRiHx6JUs7zKj8fFc6XvItQ1lg",
+            authDomain: "budget-mgmt-moo-2025.firebaseapp.com",
+            databaseURL: "https://budget-mgmt-moo-2025-default-rtdb.firebaseio.com",
+            projectId: "budget-mgmt-moo-2025",
+            storageBucket: "budget-mgmt-moo-2025.firebasestorage.app",
+            messagingSenderId: "638371340579",
+            appId: "1:638317340579:web:e1307b4bb395e46f635c16",
+            measurementId: "G-VYKLT6WLGC"
+        };
+
+        // Import Firebase functions
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getDatabase, ref, onValue, set, push, remove, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+        // Check if Firebase is configured
+        if (firebaseConfig.apiKey === "YOUR_API_KEY") {
+            console.log("Firebase לא הוגדר עדיין");
+            window.firebaseConfigured = false;
+        } else {
+            try {
+                // Initialize Firebase
+                const app = initializeApp(firebaseConfig);
+                const database = getDatabase(app);
+                
+                // Make Firebase available globally
+                window.firebase = {
+                    database,
+                    ref,
+                    onValue,
+                    set,
+                    push,
+                    remove,
+                    serverTimestamp
+                };
+                
+                window.firebaseConfigured = true;
+                document.getElementById('setupNotice').style.display = 'none';
+                console.log("Firebase initialized successfully! 🔥");
+                
+            } catch (error) {
+                console.error("Firebase initialization error:", error);
+                window.firebaseConfigured = false;
+            }
+        }
+    </script>
+
+    <script>
+        // Global variables
+        let isAuthenticated = false;
+        let cowClickCount = 0;
+        let categories = [];
+        let participants = [];
+        let pendingAction = null;
+        let currentTab = 'main';
+        let isConnected = false;
+        const MASTER_PASSWORD = 'מווווו2025';
+        
+        // Cow sounds
+        const cowSounds = [
+            'מווווווו! 🐄',
+            'מוווווו! 🐮',
+            'מווו מווו! 🐄',
+            'מוווווווווו! 🐮',
+            'מו מו מווווו! 🐄',
+            'מוווו מוווו! 🐮',
+            'מווווווווווו! 🐄',
+            'מו! מו! מווווו! 🐮',
+            'מווווווו מווו! 🐄',
+            'מווווווווו מו! 🐮'
+        ];
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            initializeFirebase();
+            updateDisplay();
+        });
+
+        // Initialize Firebase listeners
+        function initializeFirebase() {
+            if (!window.firebaseConfigured) {
+                updateConnectionStatus(false);
+                return;
+            }
+
+            try {
+                const { database, ref, onValue } = window.firebase;
+                
+                // Listen to categories
+                const categoriesRef = ref(database, 'budget/categories');
+                onValue(categoriesRef, (snapshot) => {
+                    const data = snapshot.val();
+                    categories = data ? Object.values(data) : [];
+                    updateCategoriesList();
+                    updateDisplay();
+                    updateConnectionStatus(true);
+                }, (error) => {
+                    console.error("Error reading categories:", error);
+                    updateConnectionStatus(false);
+                });
+
+                // Listen to participants
+                const participantsRef = ref(database, 'budget/participants');
+                onValue(participantsRef, (snapshot) => {
+                    const data = snapshot.val();
+                    participants = data ? Object.values(data) : [];
+                    updateParticipantsList();
+                    updateParticipantsDisplay();
+                });
+
+                // Listen to event details
+                const eventRef = ref(database, 'budget/event');
+                onValue(eventRef, (snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        document.getElementById('eventName').value = data.name || '';
+                        document.getElementById('eventDate').value = data.date || '';
+                        document.getElementById('budgetPerPerson').value = data.budgetPerPerson || 0;
+                        document.getElementById('participantCount').value = data.participantCount || 1;
+                        document.getElementById('maxBudget').value = data.maxBudget || '';
+                        updateDisplay();
+                    }
+                });
+
+            } catch (error) {
+                console.error("Firebase setup error:", error);
+                updateConnectionStatus(false);
+            }
+        }
+
+        // Update connection status
+        function updateConnectionStatus(connected) {
+            isConnected = connected;
+            const statusElement = document.getElementById('connectionStatus');
+            
+            if (connected) {
+                statusElement.className = 'status-item connected';
+                statusElement.textContent = '🌐 מחובר - עדכונים בזמן אמת';
+            } else {
+                statusElement.className = 'status-item disconnected';
+                statusElement.textContent = '🔌 לא מחובר';
+            }
+        }
+
+        // Firebase data operations
+        function saveToFirebase(path, data) {
+            if (!window.firebaseConfigured || !isConnected) {
+                showNotification('❌ לא מחובר ל-Firebase', 'warning');
+                return;
+            }
+
+            try {
+                const { database, ref, set, serverTimestamp } = window.firebase;
+                const dataRef = ref(database, path);
+                
+                // Add timestamp to data
+                const dataWithTimestamp = {
+                    ...data,
+                    timestamp: serverTimestamp()
+                };
+                
+                set(dataRef, dataWithTimestamp);
+            } catch (error) {
+                console.error("Error saving to Firebase:", error);
+                showNotification('❌ שגיאה בשמירה', 'warning');
+            }
+        }
+
+        function saveEventData() {
+            const eventData = {
+                name: document.getElementById('eventName').value || '',
+                date: document.getElementById('eventDate').value || '',
+                budgetPerPerson: parseFloat(document.getElementById('budgetPerPerson').value) || 0,
+                participantCount: parseInt(document.getElementById('participantCount').value) || 1,
+                maxBudget: parseFloat(document.getElementById('maxBudget').value) || 0
+            };
+            
+            saveToFirebase('budget/event', eventData);
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Cow button
+            document.getElementById('cowButton').addEventListener('click', playCowSound);
+            
+            // Input change listeners
+            document.getElementById('eventName').addEventListener('change', saveEventData);
+            document.getElementById('eventDate').addEventListener('change', saveEventData);
+            document.getElementById('budgetPerPerson').addEventListener('change', () => {
+                updateDisplay();
+                saveEventData();
+            });
+            document.getElementById('participantCount').addEventListener('change', () => {
+                updateDisplay();
+                saveEventData();
+            });
+            document.getElementById('maxBudget').addEventListener('change', () => {
+                updateDisplay();
+                saveEventData();
+            });
+            
+            // Add buttons
+            document.getElementById('addCategoryBtn').addEventListener('click', () => requireAuth(addCategory));
+            document.getElementById('addParticipantBtn').addEventListener('click', () => requireAuth(addParticipant));
+            
+            // Password modal enter key
+            document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    submitPassword();
+                }
+            });
+        }
+
+        // Tab functions
+        function showTab(tabName) {
+            currentTab = tabName;
+            
+            // Update tab buttons
+            document.getElementById('mainTab').className = tabName === 'main' ? 'button button-primary' : 'button';
+            document.getElementById('mainTab').style.cssText = tabName === 'main' ? 'padding: 10px 20px;' : 'padding: 10px 20px; background: #e9ecef; color: #495057;';
+            
+            document.getElementById('participantsTab').className = tabName === 'participants' ? 'button button-primary' : 'button';
+            document.getElementById('participantsTab').style.cssText = tabName === 'participants' ? 'padding: 10px 20px;' : 'padding: 10px 20px; background: #e9ecef; color: #495057;';
+            
+            // Show/hide content
+            document.getElementById('mainContent').style.display = tabName === 'main' ? 'block' : 'none';
+            document.getElementById('participantsContent').style.display = tabName === 'participants' ? 'block' : 'none';
+        }
+
+        // Cow sound function
+        function playCowSound() {
+            cowClickCount++;
+            const button = document.getElementById('cowButton');
+            button.classList.add('animate');
+            
+            // Update counter
+            document.getElementById('cowCounter').textContent = `${cowClickCount} מווווווו!`;
+            
+            // Random sound message
+            const randomSound = cowSounds[Math.floor(Math.random() * cowSounds.length)];
+            let message = randomSound;
+            
+            // Special milestones
+            if (cowClickCount === 10) message = '🎉 עשר פרות! אתה אלוף הפרות! 🐄';
+            else if (cowClickCount === 25) message = '🌟 25 פרות! הפרות בחברותא! 🐮🐄';
+            else if (cowClickCount === 50) message = '💫 50 פרות! מלך/מלכת הפרות! 👑🐄';
+            else if (cowClickCount === 100) message = '🚀 100 פרות! אתה אגדה! 🎊🐄🎊';
+            
+            showNotification(message, cowClickCount % 10 === 0 ? 'warning' : 'info');
+            
+            // Play sound
+            try {
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance('moo');
+                    utterance.rate = 0.8 + Math.random() * 0.4;
+                    utterance.pitch = 0.8 + Math.random() * 0.6;
+                    utterance.volume = 0.3;
+                    speechSynthesis.speak(utterance);
+                }
+            } catch (e) {
+                console.log('Speech synthesis not available');
+            }
+            
+            // Remove animation
+            setTimeout(() => {
+                button.classList.remove('animate');
+            }, 300);
+        }
+
+        // Authentication functions
+        function openPasswordModal() {
+            document.getElementById('passwordModal').classList.add('show');
+            document.getElementById('passwordInput').focus();
+        }
+
+        function logout() {
+            isAuthenticated = false;
+            updateAuthStatus();
+            showNotification('🔒 התנתקת מהמערכת', 'info');
+        }
+
+        function requireAuth(action) {
+            if (isAuthenticated) {
+                action();
+            } else {
+                pendingAction = action;
+                document.getElementById('passwordModal').classList.add('show');
+                document.getElementById('passwordInput').focus();
+            }
+        }
+
+        function submitPassword() {
+            const password = document.getElementById('passwordInput').value;
+            if (password === MASTER_PASSWORD) {
+                isAuthenticated = true;
+                document.getElementById('passwordModal').classList.remove('show');
+                document.getElementById('passwordInput').value = '';
+                updateAuthStatus();
+                if (pendingAction) {
+                    pendingAction();
+                    pendingAction = null;
+                }
+                showNotification('🔓 אומת בהצלחה! עכשיו אפשר לערוך', 'info');
+            } else {
+                showNotification('❌ סיסמא שגויה! נסה שוב', 'warning');
+                document.getElementById('passwordInput').value = '';
+            }
+        }
+
+        function cancelPassword() {
+            document.getElementById('passwordModal').classList.remove('show');
+            document.getElementById('passwordInput').value = '';
+            pendingAction = null;
+        }
+
+        function updateAuthStatus() {
+            const statusElement = document.getElementById('authStatus');
+            const inputs = document.querySelectorAll('.input');
+            const addCategoryBtn = document.getElementById('addCategoryBtn');
+            const addParticipantBtn = document.getElementById('addParticipantBtn');
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            
+            if (isAuthenticated) {
+                statusElement.className = 'status-item authenticated';
+                statusElement.textContent = '🔓 מאומת - יכול לערוך';
+                
+                inputs.forEach(input => input.disabled = false);
+                
+                addCategoryBtn.disabled = false;
+                addCategoryBtn.className = 'button button-success';
+                addCategoryBtn.textContent = '➕ הוסף קטגוריה';
+                
+                addParticipantBtn.disabled = false;
+                addParticipantBtn.className = 'button button-success';
+                addParticipantBtn.textContent = '➕ הוסף משתתף';
+                
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+            } else {
+                statusElement.className = 'status-item not-authenticated';
+                statusElement.textContent = '🔒 צפייה בלבד';
+                
+                inputs.forEach(input => input.disabled = true);
+                
+                addCategoryBtn.disabled = true;
+                addCategoryBtn.className = 'button button-disabled';
+                addCategoryBtn.textContent = '➕ נדרש אימות לעריכה';
+                
+                addParticipantBtn.disabled = true;
+                addParticipantBtn.className = 'button button-disabled';
+                addParticipantBtn.textContent = '➕ נדרש אימות לעריכה';
+                
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+            }
+        }
+
+        // Category functions
+        function addCategory() {
+            const name = document.getElementById('categoryName').value.trim();
+            const amount = parseFloat(document.getElementById('categoryAmount').value) || 0;
+            
+            if (name && amount > 0) {
+                const category = {
+                    id: Date.now(),
+                    name: name,
+                    amount: amount,
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Save to Firebase
+                if (window.firebaseConfigured && isConnected) {
+                    const { database, ref, push } = window.firebase;
+                    const categoriesRef = ref(database, 'budget/categories');
+                    push(categoriesRef, category);
+                } else {
+                    // Fallback to local storage
+                    categories.push(category);
+                    updateCategoriesList();
+                    updateDisplay();
+                }
+                
+                document.getElementById('categoryName').value = '';
+                document.getElementById('categoryAmount').value = '';
+                
+                showNotification(`✅ נוספה קטגוריה: ${name}`, 'info');
+            } else {
+                showNotification('⚠️ אנא מלא שם וסכום תקינים', 'warning');
+            }
+        }
+
+        function removeCategory(id) {
+            requireAuth(() => {
+                if (window.firebaseConfigured && isConnected) {
+                    const { database, ref, remove } = window.firebase;
+                    const categoryRef = ref(database, `budget/categories/${id}`);
+                    remove(categoryRef);
+                } else {
+                    const category = categories.find(c => c.id === id);
+                    categories = categories.filter(c => c.id !== id);
+                    updateCategoriesList();
+                    updateDisplay();
+                    showNotification(`🗑️ נמחקה קטגוריה: ${category?.name}`, 'info');
+                }
+            });
+        }
+
+        function updateCategoriesList() {
+            const container = document.getElementById('categoriesList');
+            
+            if (categories.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #6c757d; padding: 20px;">עדיין לא הוספו קטגוריות</p>';
+                return;
+            }
+            
+            let html = '';
+            categories.forEach(category => {
+                const displayDate = category.timestamp ? new Date(category.timestamp).toLocaleDateString('he-IL') : 'לא ידוע';
+                html += `
+                    <div class="category-item">
+                        <div>
+                            <div class="category-name">${category.name}</div>
+                            <small style="color: #6c757d;">${displayDate}</small>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div class="category-amount">₪${category.amount.toLocaleString('he-IL', {minimumFractionDigits: 2})}</div>
+                            <button class="button button-danger" style="padding: 5px 10px; font-size: 0.8rem;" onclick="removeCategory('${category.id}')" ${!isAuthenticated ? 'disabled' : ''}>
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // Participant functions
+        function addParticipant() {
+            const name = document.getElementById('participantName').value.trim();
+            const amount = parseFloat(document.getElementById('participantAmount').value) || 0;
+            
+            if (name && amount >= 0) {
+                const participant = {
+                    id: Date.now(),
+                    name: name,
+                    amount: amount,
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Save to Firebase
+                if (window.firebaseConfigured && isConnected) {
+                    const { database, ref, push } = window.firebase;
+                    const participantsRef = ref(database, 'budget/participants');
+                    push(participantsRef, participant);
+                } else {
+                    // Fallback to local storage
+                    participants.push(participant);
+                    updateParticipantsList();
+                    updateParticipantsDisplay();
+                }
+                
+                document.getElementById('participantName').value = '';
+                document.getElementById('participantAmount').value = '';
+                
+                showNotification(`✅ נוסף משתתף: ${name}`, 'info');
+            } else {
+                showNotification('⚠️ אנא מלא שם תקין וסכום (יכול להיות 0)', 'warning');
+            }
+        }
+
+        function removeParticipant(id) {
+            requireAuth(() => {
+                if (window.firebaseConfigured && isConnected) {
+                    const { database, ref, remove } = window.firebase;
+                    const participantRef = ref(database, `budget/participants/${id}`);
+                    remove(participantRef);
+                } else {
+                    const participant = participants.find(p => p.id === id);
+                    participants = participants.filter(p => p.id !== id);
+                    updateParticipantsList();
+                    updateParticipantsDisplay();
+                    showNotification(`🗑️ הוסר משתתף: ${participant?.name}`, 'info');
+                }
+            });
+        }
+
+        function updateParticipantsList() {
+            const container = document.getElementById('participantsList');
+            
+            if (participants.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #6c757d; padding: 20px;">עדיין לא הוספו משתתפים</p>';
+                return;
+            }
+            
+            let html = '';
+            participants.forEach(participant => {
+                const displayDate = participant.timestamp ? new Date(participant.timestamp).toLocaleDateString('he-IL') : 'לא ידוע';
+                html += `
+                    <div class="category-item">
+                        <div>
+                            <div class="category-name">${participant.name}</div>
+                            <small style="color: #6c757d;">${displayDate}</small>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div class="category-amount">₪${participant.amount.toLocaleString('he-IL', {minimumFractionDigits: 2})}</div>
+                            <button class="button button-danger" style="padding: 5px 10px; font-size: 0.8rem;" onclick="removeParticipant('${participant.id}')" ${!isAuthenticated ? 'disabled' : ''}>
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function updateParticipantsDisplay() {
+            const totalContributions = participants.reduce((sum, p) => sum + p.amount, 0);
+            const totalParticipantsCount = participants.length;
+            const averageContribution = totalParticipantsCount > 0 ? totalContributions / totalParticipantsCount : 0;
+            
+            document.getElementById('totalContributions').textContent = `₪${totalContributions.toLocaleString('he-IL', {minimumFractionDigits: 2})}`;
+            document.getElementById('totalParticipants').textContent = totalParticipantsCount.toString();
+            document.getElementById('averageContribution').textContent = `₪${averageContribution.toLocaleString('he-IL', {minimumFractionDigits: 2})}`;
+        }
+
+        // Update display
+        function updateDisplay() {
+            const budgetPerPerson = parseFloat(document.getElementById('budgetPerPerson').value) || 0;
+            const participantCount = parseInt(document.getElementById('participantCount').value) || 1;
+            const maxBudget = parseFloat(document.getElementById('maxBudget').value) || 0;
+            
+            const totalBudget = budgetPerPerson * participantCount;
+            const totalSpent = categories.reduce((sum, cat) => sum + cat.amount, 0);
+            const difference = totalBudget - totalSpent;
+            
+            // Update total budget display
+            document.getElementById('totalBudget').textContent = `₪${totalBudget.toLocaleString('he-IL', {minimumFractionDigits: 2})}`;
+            document.getElementById('budgetBreakdown').textContent = `${participantCount} משתתפים × ₪${budgetPerPerson.toLocaleString('he-IL', {minimumFractionDigits: 2})}`;
+            
+            // Update summary
+            document.getElementById('summaryBudget').textContent = `₪${totalBudget.toLocaleString('he-IL', {minimumFractionDigits: 2})}`;
+            document.getElementById('summarySpent').textContent = `₪${totalSpent.toLocaleString('he-IL', {minimumFractionDigits: 2})}`;
+            document.getElementById('differenceAmount').textContent = `₪${Math.abs(difference).toLocaleString('he-IL', {minimumFractionDigits: 2})}`;
+            
+            const differenceElement = document.getElementById('summaryDifference');
+            const titleElement = document.getElementById('differenceTitle');
+            
+            if (difference >= 0) {
+                differenceElement.className = 'summary-item summary-difference positive';
+                titleElement.textContent = 'יתרה';
+            } else {
+                differenceElement.className = 'summary-item summary-difference negative';
+                titleElement.textContent = 'חריגה';
+            }
+            
+            // Update participants display
+            updateParticipantsDisplay();
+            
+            // Check for budget alerts
+            if (maxBudget > 0 && totalSpent > maxBudget) {
+                showNotification(`🚨 חרגתם מהתקציב המקסימלי! (₪${(totalSpent - maxBudget).toFixed(2)} מעל המגבלה)`, 'warning');
+            }
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div style="font-weight: 600; margin-bottom: 5px;">${message}</div>
+                <div style="font-size: 0.8rem; opacity: 0.8;">${new Date().toLocaleTimeString('he-IL')}</div>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
